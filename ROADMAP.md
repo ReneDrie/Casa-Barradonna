@@ -51,8 +51,9 @@ The preview artwork is illustrative. The current apartment facts, booking dates,
 
 ## P1 · Hosting, search, and quality
 
-- [ ] **Developer — Finish repository and hosting setup.** Push the project to `ReneDrie/Casa-Barradonna`, review access and backups, and connect it to Cloudflare Pages.
-- [ ] **Owner + developer — Select the domain and deploy.** Configure DNS, HTTPS, production and staging environments, build variables, and server secrets. Verify redirects and both language URL structures.
+- [x] **Developer — Connect GitHub and Cloudflare Pages.** The `main` branch of `ReneDrie/Casa-Barradonna` deploys to `casa-barradonna.pages.dev`.
+- [ ] **Owner + developer — Review repository access and backups.** Confirm who can push and who can manage the Cloudflare project.
+- [ ] **Owner + developer — Select the production domain and launch setup.** Configure DNS, HTTPS, production and staging environments, build variables, and server secrets. Verify redirects and both language URL structures.
 - [ ] **Developer — Perform the public launch check.** Set the real site URL, confirm published content and photos, then enable indexing. Inspect `robots.txt`, sitemap, canonicals, language alternates, and social previews; submit the sitemap to search tools.
 - [ ] **Developer — Check accessibility and performance on real devices.** Review contrast, focus order, form errors, image loading, layout shifts, and Core Web Vitals after final media is added.
 - [ ] **Developer — Add basic operational monitoring.** Alert the site manager about failed builds and booking endpoint errors; document how to disable requests quickly if email or availability fails.

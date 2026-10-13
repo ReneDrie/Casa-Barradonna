@@ -4,6 +4,8 @@ A bilingual Astro website for a future two-bedroom holiday apartment in Los Alc�
 
 See [the project roadmap](ROADMAP.md) for prioritized TODOs, launch requirements, and later improvements.
 
+**Temporary live preview:** [casa-barradonna.pages.dev](https://casa-barradonna.pages.dev/en/) · [Nederlands](https://casa-barradonna.pages.dev/nl/). Cloudflare Pages builds from the `main` branch of [ReneDrie/Casa-Barradonna](https://github.com/ReneDrie/Casa-Barradonna) on every push. Search indexing and booking requests are disabled for this preview.
+
 ## Current preview
 
 - English and Dutch pages: home, apartment, Los Alcázares, about, request.
@@ -35,7 +37,7 @@ The five core URLs are defined in `src/lib/routes.ts` and should stay fixed. Edi
 
 ## Deploy the public site
 
-Cloudflare Pages can use this repository with build command `npm run build` and output directory `dist`. The `functions/api/` directory supplies the two booking endpoints. Set `PUBLIC_SITE_URL` to the real domain before launch.
+Cloudflare Pages uses this repository with build command `npm run build` and output directory `dist`. The `functions/api/` directory supplies the two booking endpoints. The temporary Pages URL is set as `PUBLIC_SITE_URL` in the build environment; replace it with the real domain before launch.
 
 The site is deliberately marked `noindex` and its generated `robots.txt` blocks crawlers while `PUBLIC_SITE_LIVE=false`. Change this to `true` only after the real domain, content, photos, and required rental details have been approved. The sitemap and language alternates are generated with the build.
 

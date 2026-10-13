@@ -1,0 +1,82 @@
+---
+import type { Locale } from '../lib/types';
+
+interface Props { locale: Locale; eyebrow?: string; heading: string; text: string }
+const { locale, eyebrow, heading, text } = Astro.props;
+const enabled = import.meta.env.PUBLIC_BOOKING_REQUESTS_ENABLED === 'true';
+const firstDate = import.meta.env.PUBLIC_FIRST_REQUEST_DATE || '2027-04-01';
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const t = locale === 'en' ? {
+  arrival: 'Arrival', departure: 'Departure', guests: 'Guests', name: 'Your name', email: 'Email address', message: 'A note for us (optional)', privacy: 'I agree that my details may be used to reply to this request.', send: 'Send request', closed: 'Requests are not open yet', status: 'Dates are indicative until we confirm your stay.', checking: 'Checking dates…', available: 'These dates look open, subject to confirmation.', unavailable: 'These dates may be unavailable. You can still ask us.', unknown: 'Live availability is not connected yet.', success: 'Thank you! Your request has been sent. Your stay is not confirmed until we reply.', error: 'We could not send your request. Please try again later.', invalid: 'Please choose a departure at least three nights after arrival.', placeholder: 'Tell us anything helpful about your trip.'
+} : {
+  arrival: 'Aankomst', departure: 'Vertrek', guests: 'Aantal gasten', name: 'Je naam', email: 'E-mailadres', message: 'Een berichtje voor ons (optioneel)', privacy: 'Ik ga ermee akkoord dat mijn gegevens gebruikt worden om op deze aanvraag te reageren.', send: 'Aanvraag versturen', closed: 'Aanvragen zijn nog niet open', status: 'Data zijn indicatief totdat we je verblijf bevestigen.', checking: 'Data controleren…', available: 'Deze data lijken vrij, onder voorbehoud van bevestiging.', unavailable: 'Deze data zijn mogelijk niet beschikbaar. Je kunt het ons alsnog vragen.', unknown: 'Live beschikbaarheid is nog niet gekoppeld.', success: 'Bedankt! Je aanvraag is verstuurd. Je verblijf is pas bevestigd wanneer we reageren.', error: 'We konden je aanvraag niet versturen. Probeer het later opnieuw.', invalid: 'Kies een vertrekdatum minimaal drie nachten na aankomst.', placeholder: 'Vertel gerust iets over je reis.'
+};
+---
+<section class="section-pad booking-section" id="request-form">
+  <div class="shell booking-grid">
+    <div class="booking-intro"><p class="eyebrow">{eyebrow}</p><h2>{heading}</h2><p class="body-large">{text}</p><div class="booking-side-note"><span aria-hidden="true">✳</span><p>{t.status}</p></div></div>
+    <div class="booking-card">
+      {!enabled && <div class="booking-preview" role="status"><span class="status-dot"></span>{t.closed}</div>}
+      <form id="booking-request-form" data-enabled={enabled ? 'true' : 'false'} data-locale={locale} data-first-date={firstDate} data-messages={JSON.stringify(t)} novalidate>
+        <div class="form-row"><label>{t.arrival}<input name="arrival" type="date" min={firstDate} required disabled={!enabled} /></label><label>{t.departure}<input name="departure" type="date" min={firstDate} required disabled={!enabled} /></label></div>
+        <p id="availability-status" class="availability-status" aria-live="polite">{t.unknown}</p>
+        <div class="form-row"><label>{t.guests}<input name="guests" type="number" min="1" max="12" value="2" required disabled={!enabled} /></label><label>{t.name}<input name="name" type="text" autocomplete="name" maxlength="100" required disabled={!enabled} /></label></div>
+        <label>{t.email}<input name="email" type="email" autocomplete="email" maxlength="200" required disabled={!enabled} /></label>
+        <label>{t.message}<textarea name="message" rows="4" maxlength="1000" placeholder={t.placeholder} disabled={!enabled}></textarea></label>
+        <label class="checkbox-row"><input name="privacy" type="checkbox" required disabled={!enabled} /><span>{t.privacy}</span></label>
+        <div class="honeypot" aria-hidden="true"><label>Website<input name="website" type="text" tabindex="-1" autocomplete="off" /></label></div>
+        {enabled && turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>}
+        <button class="button button-dark form-submit" type="submit" disabled={!enabled}>{enabled ? t.send : t.closed}<span aria-hidden="true">↗</span></button>
+        <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+{enabled && turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+<script>
+  const form = document.querySelector<HTMLFormElement>('#booking-request-form');
+  if (form?.dataset.enabled === 'true') {
+    const messages = JSON.parse(form.dataset.messages || '{}');
+    const arrival = form.elements.namedItem('arrival') as HTMLInputElement;
+    const departure = form.elements.namedItem('departure') as HTMLInputElement;
+    const availability = document.querySelector<HTMLElement>('#availability-status');
+    const status = document.querySelector<HTMLElement>('#form-status');
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const earliest = [form.dataset.firstDate || '2027-04-01', new Date().toISOString().slice(0, 10)].sort().at(-1) || '2027-04-01';
+    arrival.min = earliest;
+    departure.min = earliest;
+    const nights = () => (Date.parse(departure.value) - Date.parse(arrival.value)) / 86400000;
+    const checkAvailability = async () => {
+      if (!arrival.value || !departure.value || !availability) return;
+      if (!Number.isFinite(nights()) || nights() < 3) { availability.textContent = messages.invalid; return; }
+      availability.textContent = messages.checking;
+      try {
+        const query = new URLSearchParams({ arrival: arrival.value, departure: departure.value });
+        const response = await fetch(`/api/availability?${query}`);
+        const result = await response.json();
+        availability.textContent = result.status === 'available' ? messages.available : result.status === 'blocked' ? messages.unavailable : messages.unknown;
+      } catch { availability.textContent = messages.unknown; }
+    };
+    arrival.addEventListener('change', checkAvailability);
+    departure.addEventListener('change', checkAvailability);
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity() || !Number.isFinite(nights()) || nights() < 3) { if (status) status.textContent = messages.invalid; return; }
+      if (status) status.textContent = '';
+      if (submit) submit.disabled = true;
+      const values = Object.fromEntries(new FormData(form).entries());
+      try {
+        const response = await fetch('/api/booking-request', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(values) });
+        if (!response.ok) throw new Error('Request failed');
+        form.reset();
+        if (availability) availability.textContent = messages.unknown;
+        if (status) status.textContent = messages.success;
+      } catch { if (status) status.textContent = messages.error; }
+      finally {
+        if (submit) submit.disabled = false;
+        const turnstile = (window as Window & { turnstile?: { reset: () => void } }).turnstile;
+        turnstile?.reset();
+      }
+    });
+  }
+</script>

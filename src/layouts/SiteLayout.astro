@@ -1,0 +1,102 @@
+---
+import '../styles/global.css';
+import type { Locale, PageKey } from '../lib/types';
+import { navigation, pageKeys, pathFor } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+  pageKey: string;
+  slug?: string;
+  alternateSlug?: string;
+  title: string;
+  description: string;
+}
+
+const { locale, pageKey, slug, alternateSlug, title, description } = Astro.props;
+const otherLocale: Locale = locale === 'en' ? 'nl' : 'en';
+const baseUrl = import.meta.env.PUBLIC_SITE_URL || 'https://casabarradonna.example';
+const isCorePage = pageKeys.includes(pageKey as PageKey);
+const currentPath = isCorePage ? pathFor(locale, pageKey as PageKey) : `/${locale}/${slug}/`;
+const alternatePath = isCorePage ? pathFor(otherLocale, pageKey as PageKey) : alternateSlug ? `/${otherLocale}/${alternateSlug}/` : undefined;
+const canonical = new URL(currentPath, baseUrl).toString();
+const enUrl = locale === 'en' ? canonical : alternatePath ? new URL(alternatePath, baseUrl).toString() : undefined;
+const nlUrl = locale === 'nl' ? canonical : alternatePath ? new URL(alternatePath, baseUrl).toString() : undefined;
+const isLive = import.meta.env.PUBLIC_SITE_LIVE === 'true';
+const t = locale === 'en'
+  ? { request: 'Plan your stay', menu: 'Menu', close: 'Close', footer: 'A little place in the sun.', links: 'Explore', note: 'Website preview · opening planned for 2027', illustration: 'Illustrations show the mood, not the apartment.', social: 'Follow the story', bottom: 'Made for slow, sunny days.' }
+  : { request: 'Plan je verblijf', menu: 'Menu', close: 'Sluiten', footer: 'Een plekje in de zon.', links: 'Ontdek', note: 'Websitevoorbeeld · verwachte opening in 2027', illustration: 'Illustraties geven sfeer weer, niet het appartement.', social: 'Volg ons verhaal', bottom: 'Voor rustige, zonnige dagen.' };
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8f2e9" />
+    <meta name="description" content={description} />
+    {!isLive && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    {enUrl && nlUrl && <><link rel="alternate" hreflang="en" href={enUrl} /><link rel="alternate" hreflang="nl" href={nlUrl} /><link rel="alternate" hreflang="x-default" href={enUrl} /></>}
+    <link rel="icon" type="image/svg+xml" href="/brand/mark.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/images/coastal-hero.webp', baseUrl).toString()} />
+    <title>{title}</title>
+  </head>
+  <body>
+    {!isLive && <div class="preview-strip">{t.note}</div>}
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}>
+          <img src="/brand/mark.svg" alt="" width="48" height="48" />
+          <span class="brand-type"><strong>casa</strong><strong>barra<span>donna</span></strong></span>
+        </a>
+        <nav id="primary-navigation" class="primary-navigation" aria-label={locale === 'en' ? 'Main navigation' : 'Hoofdnavigatie'}>
+          {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)} aria-current={pageKey === key ? 'page' : undefined}>{label}</a>)}
+          <a class="nav-request" href={pathFor(locale, 'request')}>{t.request} <span aria-hidden="true">↗</span></a>
+        </nav>
+        <div class="header-actions">
+          <a class="language-switch" href={alternatePath || pathFor(otherLocale, 'home')} lang={otherLocale} hreflang={otherLocale} aria-label={otherLocale === 'en' ? 'View in English' : 'Bekijk in het Nederlands'}>{otherLocale.toUpperCase()}</a>
+          <button class="menu-toggle" type="button" aria-label={t.menu} data-open-label={t.menu} data-close-label={t.close} aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span></button>
+        </div>
+      </div>
+    </header>
+    <main id="main-content"><slot /></main>
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div>
+          <a class="footer-brand" href={pathFor(locale, 'home')}>casa<br /><span>barradonna</span></a>
+          <p>{t.footer}</p>
+          <span class="footer-location">Los Alcázares · Región de Murcia · España</span>
+        </div>
+        <div class="footer-links">
+          <span class="footer-heading">{t.links}</span>
+          {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)}>{label}</a>)}
+          <a href={pathFor(locale, 'request')}>{t.request}</a>
+        </div>
+        <div class="footer-social">
+          <span class="footer-heading">{t.social}</span>
+          <a href="https://www.instagram.com/casabarradonna/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+          <p>{t.illustration}</p>
+        </div>
+      </div>
+      <div class="shell footer-bottom"><span>© {new Date().getFullYear()} Casa Barradonna</span><span>{t.bottom}</span></div>
+    </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const nav = document.querySelector<HTMLElement>('.primary-navigation');
+      toggle?.addEventListener('click', () => {
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!isOpen));
+        toggle.setAttribute('aria-label', isOpen ? toggle.dataset.openLabel || 'Menu' : toggle.dataset.closeLabel || 'Close');
+        nav?.classList.toggle('is-open', !isOpen);
+      });
+      nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+        nav.classList.remove('is-open');
+        toggle?.setAttribute('aria-expanded', 'false');
+        toggle?.setAttribute('aria-label', toggle.dataset.openLabel || 'Menu');
+      }));
+    </script>
+  </body>
+</html>

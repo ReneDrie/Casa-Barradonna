@@ -1,0 +1,37 @@
+import { defineArrayMember, defineField, defineType } from 'sanity';
+
+const imageField = defineField({ name: 'image', title: 'Image', type: 'image', options: { hotspot: true } });
+const temporaryImageField = defineField({ name: 'imageUrl', title: 'Temporary local illustration path', type: 'string', description: 'Used until an uploaded image is added; for example /images/coastal-hero.webp.' });
+const eyebrowField = defineField({ name: 'eyebrow', title: 'Small heading', type: 'string' });
+const headingField = defineField({ name: 'heading', title: 'Heading', type: 'string', validation: (Rule) => Rule.required() });
+const textField = defineField({ name: 'text', title: 'Body text', type: 'text', rows: 4 });
+const buttonLabelField = defineField({ name: 'buttonLabel', title: 'Button label', type: 'string' });
+const buttonHrefField = defineField({ name: 'buttonHref', title: 'Button link', type: 'string', description: 'Use a local path such as /en/request/ or a full https:// URL.' });
+
+const hero = defineType({ name: 'hero', title: 'Hero', type: 'object', fields: [eyebrowField, headingField, textField, imageField, temporaryImageField, buttonLabelField, buttonHrefField], preview: { select: { title: 'heading', media: 'image' }, prepare: ({ title, media }) => ({ title, subtitle: 'Hero', media }) } });
+const facts = defineType({ name: 'facts', title: 'Fact strip', type: 'object', fields: [defineField({ name: 'items', type: 'array', of: [defineArrayMember({ type: 'object', fields: [defineField({ name: 'value', type: 'string' }), defineField({ name: 'label', type: 'string' })] })], validation: (Rule) => Rule.min(2).max(4) })], preview: { prepare: () => ({ title: 'Fact strip' }) } });
+const intro = defineType({ name: 'intro', title: 'Text introduction', type: 'object', fields: [eyebrowField, headingField, textField, defineField({ name: 'align', type: 'string', options: { list: [{ title: 'Left', value: 'left' }, { title: 'Centre', value: 'center' }] } })], preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title, subtitle: 'Introduction' }) } });
+const imageText = defineType({ name: 'imageText', title: 'Image and text', type: 'object', fields: [eyebrowField, headingField, textField, imageField, temporaryImageField, defineField({ name: 'imageAlt', title: 'Image description', type: 'string' }), buttonLabelField, buttonHrefField, defineField({ name: 'reverse', title: 'Image on right', type: 'boolean' })], preview: { select: { title: 'heading', media: 'image' }, prepare: ({ title, media }) => ({ title, subtitle: 'Image and text', media }) } });
+const featureGrid = defineType({ name: 'featureGrid', title: 'Feature cards', type: 'object', fields: [eyebrowField, headingField, defineField({ name: 'items', type: 'array', of: [defineArrayMember({ type: 'object', fields: [defineField({ name: 'icon', type: 'string', options: { list: ['sun', 'wave', 'pool', 'bed', 'car', 'heart'] } }), defineField({ name: 'title', type: 'string' }), defineField({ name: 'text', type: 'text', rows: 3 })] })], validation: (Rule) => Rule.min(1).max(3) })], preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title, subtitle: 'Feature cards' }) } });
+const gallery = defineType({ name: 'gallery', title: 'Photo gallery', type: 'object', fields: [eyebrowField, headingField, textField, defineField({ name: 'items', type: 'array', of: [defineArrayMember({ type: 'object', fields: [imageField, temporaryImageField, defineField({ name: 'alt', type: 'string', title: 'Image description' }), defineField({ name: 'label', type: 'string' })] })], validation: (Rule) => Rule.min(1).max(6) })], preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title, subtitle: 'Gallery' }) } });
+const quote = defineType({ name: 'quote', title: 'Quote', type: 'object', fields: [textField, defineField({ name: 'credit', type: 'string' })], preview: { select: { title: 'text' }, prepare: ({ title }) => ({ title, subtitle: 'Quote' }) } });
+const faq = defineType({ name: 'faq', title: 'Frequently asked questions', type: 'object', fields: [eyebrowField, headingField, defineField({ name: 'items', type: 'array', of: [defineArrayMember({ type: 'object', fields: [defineField({ name: 'question', type: 'string' }), defineField({ name: 'answer', type: 'text', rows: 3 })] })] })], preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title, subtitle: 'FAQ' }) } });
+const callout = defineType({ name: 'callout', title: 'Call to action', type: 'object', fields: [eyebrowField, headingField, textField, buttonLabelField, buttonHrefField], preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title, subtitle: 'Call to action' }) } });
+const bookingForm = defineType({ name: 'bookingForm', title: 'Booking request form', type: 'object', fields: [eyebrowField, headingField, textField], preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title, subtitle: 'Booking request form' }) } });
+
+const page = defineType({
+  name: 'page', title: 'Pages', type: 'document',
+  fields: [
+    defineField({ name: 'pageKey', title: 'Page key', type: 'string', description: 'A stable key shared by the English and Dutch versions. Existing keys: home, apartment, area, about, request. For new pages use lowercase letters and hyphens.', validation: (Rule) => Rule.required().regex(/^[a-z][a-z0-9-]*$/) }),
+    defineField({ name: 'locale', title: 'Language', type: 'string', options: { list: [{ title: 'English', value: 'en' }, { title: 'Nederlands', value: 'nl' }] }, validation: (Rule) => Rule.required() }),
+    defineField({ name: 'slug', title: 'URL slug', type: 'string', description: 'For new pages, choose a unique slug in each language. Existing page URLs are managed in code.', hidden: ({ document }) => ['home', 'apartment', 'area', 'about', 'request'].includes(String(document?.pageKey || '')), validation: (Rule) => Rule.custom((value, context) => ['home', 'apartment', 'area', 'about', 'request'].includes(String(context.document?.pageKey || '')) || (typeof value === 'string' && /^[a-z0-9-]+$/.test(value)) ? true : 'Use a lowercase URL slug for new pages') }),
+    defineField({ name: 'title', title: 'SEO title', type: 'string', validation: (Rule) => Rule.required().max(70) }),
+    defineField({ name: 'description', title: 'SEO description', type: 'text', rows: 2, validation: (Rule) => Rule.required().max(180) }),
+    defineField({ name: 'sections', title: 'Page sections', type: 'array', of: [
+      defineArrayMember({ type: 'hero' }), defineArrayMember({ type: 'facts' }), defineArrayMember({ type: 'intro' }), defineArrayMember({ type: 'imageText' }), defineArrayMember({ type: 'featureGrid' }), defineArrayMember({ type: 'gallery' }), defineArrayMember({ type: 'quote' }), defineArrayMember({ type: 'faq' }), defineArrayMember({ type: 'callout' }), defineArrayMember({ type: 'bookingForm' }),
+    ], validation: (Rule) => Rule.required().min(1) }),
+  ],
+  preview: { select: { title: 'title', locale: 'locale', pageKey: 'pageKey' }, prepare: ({ title, locale, pageKey }) => ({ title, subtitle: `${locale?.toUpperCase() || '—'} · ${pageKey || 'page'}` }) },
+});
+
+export const schemaTypes = [page, hero, facts, intro, imageText, featureGrid, gallery, quote, faq, callout, bookingForm];

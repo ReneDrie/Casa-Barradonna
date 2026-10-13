@@ -1,0 +1,28 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageSections from '../../components/PageSections.astro';
+import { locales, pageKeys, slugs } from '../../lib/routes';
+import { getPage, listCmsRoutes } from '../../lib/sanity';
+import type { Locale, PageKey } from '../../lib/types';
+
+export async function getStaticPaths() {
+  const core = locales.flatMap((lang) => pageKeys.filter((key) => key !== 'home').map((key) => ({
+    params: { lang, slug: slugs[lang][key] },
+    props: { pageKey: key },
+  })));
+  const cmsRoutes = (await listCmsRoutes()).filter(({ pageKey }) => !pageKeys.includes(pageKey as PageKey));
+  const custom = cmsRoutes.map(({ locale, pageKey, slug }) => ({
+    params: { lang: locale, slug },
+    props: { pageKey, alternateSlug: cmsRoutes.find((candidate) => candidate.pageKey === pageKey && candidate.locale !== locale)?.slug },
+  }));
+  return [...core, ...custom];
+}
+
+const locale = Astro.params.lang as Locale;
+const pageKey = Astro.props.pageKey as string;
+const alternateSlug = Astro.props.alternateSlug as string | undefined;
+const page = await getPage(locale, pageKey);
+---
+<SiteLayout locale={locale} pageKey={pageKey} slug={page.slug} alternateSlug={alternateSlug} title={page.title} description={page.description}>
+  <PageSections sections={page.sections} locale={locale} pageKey={pageKey} />
+</SiteLayout>

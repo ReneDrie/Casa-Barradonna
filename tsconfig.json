@@ -1,0 +1,8 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "types": ["astro/client"]
+  },
+  "include": ["src/**/*", "functions/**/*", "studio/schemaTypes/**/*", "sanity.config.ts"],
+  "exclude": ["dist", "studio-dist", "node_modules", ".astro"]
+}

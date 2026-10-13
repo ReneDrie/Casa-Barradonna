@@ -1,0 +1,17 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageSections from '../../components/PageSections.astro';
+import { locales } from '../../lib/routes';
+import { getPage } from '../../lib/sanity';
+import type { Locale } from '../../lib/types';
+
+export function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const page = await getPage(locale, 'home');
+---
+<SiteLayout locale={locale} pageKey="home" title={page.title} description={page.description}>
+  <PageSections sections={page.sections} locale={locale} pageKey="home" />
+</SiteLayout>

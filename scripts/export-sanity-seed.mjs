@@ -10,10 +10,11 @@ const { seedPage } = await import(`data:text/javascript;base64,${encoded}`);
 const locales = ['en', 'nl'];
 const keys = ['home', 'apartment', 'area', 'about', 'request'];
 
-function withArrayKeys(section, sectionIndex) {
+function withArrayKeys(section, sectionIndex, sections) {
+  const existingSectionIndex = sectionIndex - sections.slice(0, sectionIndex).filter((item) => item._type === 'floorPlan').length;
   return {
     ...section,
-    _key: `section-${sectionIndex}`,
+    _key: section._type === 'floorPlan' ? 'floor-plan' : `section-${existingSectionIndex}`,
     ...(section.items ? { items: section.items.map((item, itemIndex) => ({ ...item, _type: 'object', _key: `item-${itemIndex}` })) } : {}),
   };
 }

@@ -7,6 +7,7 @@ import IntroBlock from './blocks/IntroBlock.astro';
 import ImageTextBlock from './blocks/ImageTextBlock.astro';
 import FeatureGridBlock from './blocks/FeatureGridBlock.astro';
 import GalleryBlock from './blocks/GalleryBlock.astro';
+import FloorPlanBlock from './blocks/FloorPlanBlock.astro';
 import QuoteBlock from './blocks/QuoteBlock.astro';
 import FaqBlock from './blocks/FaqBlock.astro';
 import CalloutBlock from './blocks/CalloutBlock.astro';
@@ -22,6 +23,7 @@ const illustrationLabel = locale === 'en' ? 'Illustrative artwork' : 'Sfeerillus
   section._type === 'imageText' ? <ImageTextBlock section={section} illustrationLabel={illustrationLabel} /> :
   section._type === 'featureGrid' ? <FeatureGridBlock section={section} /> :
   section._type === 'gallery' ? <GalleryBlock section={section} /> :
+  section._type === 'floorPlan' ? <FloorPlanBlock section={section} locale={locale} /> :
   section._type === 'quote' ? <QuoteBlock section={section} /> :
   section._type === 'faq' ? <FaqBlock section={section} /> :
   section._type === 'callout' ? <CalloutBlock section={section} /> :

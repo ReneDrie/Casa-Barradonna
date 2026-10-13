@@ -1,0 +1,114 @@
+---
+import type { Locale, Section } from '../../lib/types';
+
+type FloorPlanSection = Extract<Section, { _type: 'floorPlan' }>;
+interface Props { section: FloorPlanSection; locale: Locale }
+const { section, locale } = Astro.props;
+const area = locale === 'nl'
+  ? { interior: '58,6', bedOne: '11,2', bedTwo: '9,3', bathOne: '3,7', bathTwo: '4,1' }
+  : { interior: '58.6', bedOne: '11.2', bedTwo: '9.3', bathOne: '3.7', bathTwo: '4.1' };
+
+const labels = locale === 'nl' ? {
+  illustration: 'Schematische plattegrond',
+  interior: 'Binnenruimte', terrace: 'Terras', bedsBaths: 'Slaapkamers · badkamers',
+  kitchen: 'Keuken', living: 'Woonkamer', bedOne: 'Slaapkamer 1', bedTwo: 'Slaapkamer 2',
+  bathOne: 'Badkamer 1', bathTwo: 'Badkamer 2',
+  livingArea: '25 m² incl. keuken',
+  notToScale: 'Niet op schaal', area: 'Volgens de reserveringsplattegrond',
+} : {
+  illustration: 'Illustrated floor plan',
+  interior: 'Interior', terrace: 'Terrace', bedsBaths: 'Bedrooms · bathrooms',
+  kitchen: 'Kitchen', living: 'Living room', bedOne: 'Bedroom 1', bedTwo: 'Bedroom 2',
+  bathOne: 'Bathroom 1', bathTwo: 'Bathroom 2',
+  livingArea: '25 m² incl. kitchen',
+  notToScale: 'Not to scale', area: 'From the reservation plan',
+};
+---
+<section class="section-pad floor-plan-section" aria-labelledby="floor-plan-heading">
+  <div class="shell floor-plan-layout">
+    <div class="floor-plan-copy">
+      {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+      <h2 id="floor-plan-heading">{section.heading}</h2>
+      {section.text && <p class="body-large">{section.text}</p>}
+      <div class="plan-facts" aria-label={labels.area}>
+        <div><strong>{area.interior} <span>m²</span></strong><span>{labels.interior}</span></div>
+        <div><strong>130 <span>m²</span></strong><span>{labels.terrace}</span></div>
+        <div><strong>2 + 2</strong><span>{labels.bedsBaths}</span></div>
+      </div>
+      {section.note && <p class="plan-disclaimer"><span aria-hidden="true">✳</span>{section.note}</p>}
+    </div>
+    <figure class="floor-plan-figure">
+      <div class="plan-figure-heading"><span>{labels.illustration}</span><span>{labels.notToScale}</span></div>
+      <svg class="floor-plan-svg" viewBox="0 0 640 840" role="img" aria-label={`${labels.illustration}: ${labels.kitchen}, ${labels.living}, ${labels.bedOne}, ${labels.bedTwo}, ${labels.bathOne}, ${labels.bathTwo}, ${labels.terrace}`} xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="plan-tiles" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#d5b99b" stroke-width="1" opacity=".42" /></pattern>
+          <pattern id="plan-stripes" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#d9e1d5" stroke-width="2" opacity=".55" /></pattern>
+        </defs>
+
+        <!-- The proportions are intentionally schematic; the source drawing is not contractual. -->
+        <path d="M60 508H580V648C580 740 505 810 414 810H60Z" fill="#eac9aa" stroke="#476b69" stroke-width="6" stroke-linejoin="round" />
+        <path d="M60 508H580V648C580 740 505 810 414 810H60Z" fill="url(#plan-tiles)" />
+        <path d="M84 532H555V652C555 727 492 786 414 786H84Z" fill="none" stroke="#c29470" stroke-width="2" stroke-dasharray="5 9" />
+        <circle cx="440" cy="648" r="44" fill="#fff7e8" stroke="#c68e6c" stroke-width="3" />
+        <circle cx="440" cy="648" r="10" fill="#c68e6c" />
+        <path d="M377 648h-25m151 0h25M440 585v-25m0 151v25" stroke="#a47f61" stroke-width="8" stroke-linecap="round" />
+        <path d="M102 714c18-36 45-36 62 0m-26-42v89M186 754c13-28 34-28 47 0m-24-37v65" fill="none" stroke="#6d9279" stroke-width="8" stroke-linecap="round" />
+        <text x="290" y="614" class="plan-zone-label plan-terrace-label" text-anchor="middle">{labels.terrace}</text>
+        <text x="290" y="645" class="plan-area-label" text-anchor="middle">130 m²</text>
+
+        <!-- Apartment shell -->
+        <rect x="60" y="52" width="520" height="456" rx="4" fill="#fff8ec" stroke="#365962" stroke-width="11" />
+        <path d="M332 52V110M332 152V217M332 248V299M332 331V419M332 455V508M332 190H580M332 272H580M332 354H580" fill="none" stroke="#365962" stroke-width="9" />
+
+        <!-- Kitchen and dining -->
+        <rect x="75" y="68" width="242" height="128" fill="#f1e5d3" />
+        <path d="M89 77v32h72V77m-72 51v54h30v-54m46-48h48v27h-48z" fill="none" stroke="#a8876d" stroke-width="4" />
+        <circle cx="185" cy="93" r="7" fill="none" stroke="#a8876d" stroke-width="3" /><circle cx="203" cy="93" r="7" fill="none" stroke="#a8876d" stroke-width="3" />
+        <rect x="241" y="93" width="55" height="37" rx="3" fill="#fff8ec" stroke="#ad8b71" stroke-width="3" />
+        <circle cx="252" cy="83" r="5" fill="#c79e77" /><circle cx="285" cy="83" r="5" fill="#c79e77" /><circle cx="252" cy="141" r="5" fill="#c79e77" /><circle cx="285" cy="141" r="5" fill="#c79e77" />
+        <text x="226" y="171" class="plan-zone-label" text-anchor="middle">{labels.kitchen}</text>
+
+        <!-- Living area -->
+        <rect x="75" y="226" width="242" height="266" fill="#f8f0e3" />
+        <rect x="87" y="297" width="46" height="112" rx="12" fill="#d9b69c" stroke="#a77c64" stroke-width="2" />
+        <rect x="93" y="308" width="34" height="31" rx="7" fill="#f3d9bf" />
+        <rect x="93" y="369" width="34" height="31" rx="7" fill="#f3d9bf" />
+        <rect x="176" y="340" width="59" height="42" rx="15" fill="#eed8bb" stroke="#bc9673" stroke-width="2" />
+        <path d="M274 303h24v99h-24" fill="none" stroke="#a77c64" stroke-width="5" />
+        <text x="201" y="457" class="plan-zone-label" text-anchor="middle">{labels.living}</text>
+        <text x="201" y="480" class="plan-area-label" text-anchor="middle">{labels.livingArea}</text>
+
+        <!-- Second bedroom -->
+        <rect x="347" y="68" width="218" height="107" fill="#f3e3d6" />
+        <rect x="405" y="73" width="126" height="64" rx="5" fill="#fff9ef" stroke="#ba9984" stroke-width="3" />
+        <path d="M405 105h126M450 74v31" stroke="#c8a995" stroke-width="2" />
+        <text x="449" y="160" class="plan-zone-label" text-anchor="middle">{labels.bedTwo}</text>
+        <text x="449" y="182" class="plan-area-label" text-anchor="middle">{area.bedTwo} m²</text>
+
+        <!-- Bathrooms -->
+        <rect x="347" y="205" width="218" height="52" fill="#d9e8e5" />
+        <circle cx="375" cy="230" r="10" fill="#fffaf2" stroke="#8faead" stroke-width="2" />
+        <rect x="530" y="211" width="25" height="39" rx="2" fill="url(#plan-stripes)" stroke="#8faead" stroke-width="2" />
+        <text x="460" y="229" class="plan-zone-label plan-small-label" text-anchor="middle">{labels.bathTwo}</text>
+        <text x="460" y="248" class="plan-area-label plan-small-area" text-anchor="middle">{area.bathTwo} m²</text>
+        <rect x="347" y="287" width="218" height="52" fill="#d9e8e5" />
+        <circle cx="375" cy="312" r="10" fill="#fffaf2" stroke="#8faead" stroke-width="2" />
+        <rect x="530" y="293" width="25" height="39" rx="2" fill="url(#plan-stripes)" stroke="#8faead" stroke-width="2" />
+        <text x="460" y="311" class="plan-zone-label plan-small-label" text-anchor="middle">{labels.bathOne}</text>
+        <text x="460" y="330" class="plan-area-label plan-small-area" text-anchor="middle">{area.bathOne} m²</text>
+
+        <!-- Main bedroom -->
+        <rect x="347" y="369" width="218" height="123" fill="#f3e3d6" />
+        <rect x="399" y="376" width="134" height="75" rx="5" fill="#fff9ef" stroke="#ba9984" stroke-width="3" />
+        <path d="M399 410h134M445 376v34" stroke="#c8a995" stroke-width="2" />
+        <text x="454" y="469" class="plan-zone-label" text-anchor="middle">{labels.bedOne}</text>
+        <text x="454" y="490" class="plan-area-label" text-anchor="middle">{area.bedOne} m²</text>
+
+        <!-- Openings and terrace threshold -->
+        <path d="M141 508h146" stroke="#cde2df" stroke-width="8" /><path d="M141 508h146" stroke="#52828a" stroke-width="2" />
+        <path d="M415 508h123" stroke="#cde2df" stroke-width="8" /><path d="M415 508h123" stroke="#52828a" stroke-width="2" />
+        <path d="M356 42h76" stroke="#cde2df" stroke-width="8" /><path d="M356 42h76" stroke="#52828a" stroke-width="2" />
+      </svg>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+.floor-plan-section{background:#e9eee8}
+.floor-plan-layout{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:clamp(48px,7vw,116px)}
+.floor-plan-copy h2{max-width:560px}
+.floor-plan-copy .body-large{max-width:520px;margin-top:28px}
+.plan-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:44px}
+.plan-facts>div{display:flex;flex-direction:column;gap:8px;padding:19px 0;border-top:1px solid #b5c8be}
+.plan-facts strong{font-family:var(--serif);font-size:clamp(1.9rem,3vw,2.7rem);font-weight:500;line-height:1}
+.plan-facts strong span{font-family:inherit;font-size:.55em}
+.plan-facts>div>span{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#54716e}
+.plan-disclaimer{display:flex;gap:12px;max-width:520px;margin-top:26px;color:#647876;font-size:.8rem;line-height:1.65}
+.plan-disclaimer span{flex:none;color:#bb7b57;font-size:1.3rem;line-height:1}
+.floor-plan-figure{overflow:hidden;padding:20px;background:#fffaf3;border:1px solid #d5dfd4;box-shadow:0 24px 70px rgba(36,77,75,.1);transform:rotate(.6deg)}
+.plan-figure-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 4px 16px;border-bottom:1px solid #e1e7dc;color:#54716e;font-size:.63rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.floor-plan-svg{display:block;width:100%;height:auto;max-height:780px}
+.floor-plan-svg .plan-zone-label{fill:#365962;font-family:var(--serif);font-size:21px;letter-spacing:-.025em}
+.floor-plan-svg .plan-area-label{fill:#607d79;font-family:'Avenir Next',Avenir,Arial,sans-serif;font-size:16px;letter-spacing:.02em}
+.floor-plan-svg .plan-terrace-label{font-size:30px}
+.floor-plan-svg .plan-small-label{font-size:18px}
+.floor-plan-svg .plan-small-area{font-size:13px}
+@media(max-width:900px){.floor-plan-layout{grid-template-columns:1fr;gap:48px}.floor-plan-copy h2,.floor-plan-copy .body-large{max-width:750px}.plan-facts{grid-template-columns:repeat(3,minmax(0,1fr));max-width:760px}.floor-plan-figure{width:min(100%,700px);margin-inline:auto}}
+@media(max-width:520px){.floor-plan-figure{padding:11px;transform:none}.plan-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.plan-facts strong{font-size:1.9rem}.plan-figure-heading{font-size:.54rem}.floor-plan-svg .plan-zone-label{font-size:20px}.floor-plan-svg .plan-small-label{font-size:18px}.floor-plan-svg .plan-area-label{font-size:15px}}

@@ -13,9 +13,13 @@ Updated 13 October 2026. This is the working backlog for the website and booking
 
 The preview artwork is illustrative. The current apartment facts, booking dates, and contact information are planning content, not approved guest information.
 
+### Nearby apartment research
+
+The [Casa La Marena listing](https://www.madecostablanca.com/vakantiehuis/casa-la-marena/) is for another apartment in the same complex. It supports the shared-pool context and describes a beach about 900 metres away, consistent with our owner-provided “less than a kilometre” estimate. Its descriptions of a garden beside the pool, two bathrooms, four-person capacity, air conditioning, kitchen equipment, BBQ, and gated private parking belong to **that apartment** and must not be published as Casa Barradonna features without owner confirmation. Its map explicitly says the location may differ, so it is not a verified address or walking route for us. The [Los Alcázares tourism site](https://turismo.losalcazares.es/) is the source for the broader area guide (promenade, beaches and activities). We have not reused the listing's images, wording, or design.
+
 ## P0 · Next content and design iteration
 
-- [ ] **Owner + developer — Confirm property facts.** Record maximum guests, bed sizes and configuration, bathrooms, floor and lift access, air conditioning/heating, kitchen equipment, outdoor space, accessibility, parking arrangements, Wi-Fi, and pool rules. Publish only verified details in both languages.
+- [ ] **Owner + developer — Confirm property facts.** Record maximum guests, bed sizes and configuration, bathrooms, floor and lift access, air conditioning/heating, kitchen equipment, outdoor space, accessibility, parking arrangements, Wi-Fi, and pool rules. Specifically check whether any amenities seen in the neighbouring Casa La Marena listing also apply to our unit. Publish only verified details in both languages.
 - [ ] **Owner — Supply original media after handover.** Gather a clear exterior/arrival photo, each bedroom, bathroom, kitchen/living area, pool, and nearby beach. Confirm usage rights and identify what each image actually depicts. Replace illustrations where property photography is needed; keep any illustration only where its role is obvious.
 - [ ] **Owner + developer — Approve brand and copy.** Review the logo at small sizes, the warm English/Dutch wording, and the story behind Casa, Barra, and Donna. Resolve whether the family names and personal details should appear publicly.
 - [ ] **Owner — Verify location claims.** Confirm the address, distance to the beach, pool access, parking, and the attractions mentioned on the site. Decide whether to publish an exact map pin or a broader location until booking.

@@ -1,0 +1,7 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'faq' }> }
+const { section } = Astro.props;
+---
+<section class="section-pad faq-section"><div class="shell faq-grid"><div><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2></div><div class="faq-items">{section.items.map((item) => <details><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></div></section>

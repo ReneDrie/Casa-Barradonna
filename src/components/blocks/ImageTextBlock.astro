@@ -1,0 +1,15 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'imageText' }>; illustrationLabel: string }
+const { section, illustrationLabel } = Astro.props;
+---
+<section class:list={['section-pad', 'image-text-section', section.reverse && 'reverse']}>
+  <div class="shell image-text-grid">
+    <figure class="image-text-art">
+      {section.imageUrl ? <img src={section.imageUrl} alt={section.imageAlt || ''} loading="lazy" decoding="async" /> : <div class="empty-photo"></div>}
+      <figcaption>{illustrationLabel}</figcaption>
+    </figure>
+    <div class="image-text-copy"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2><p class="body-large">{section.text}</p>{section.buttonHref && <a class="text-link" href={section.buttonHref}>{section.buttonLabel}<span aria-hidden="true">↗</span></a>}</div>
+  </div>
+</section>

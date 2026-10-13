@@ -1,0 +1,7 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'quote' }> }
+const { section } = Astro.props;
+---
+<section class="quote-section section-pad"><div class="shell quote-inner"><span class="quote-ornament" aria-hidden="true">✳</span><blockquote>{section.text}</blockquote>{section.credit && <p>— {section.credit}</p>}</div></section>

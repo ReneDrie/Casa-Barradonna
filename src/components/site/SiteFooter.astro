@@ -1,0 +1,29 @@
+---
+import type { Locale } from '../../lib/types';
+import { navigation, pathFor } from '../../lib/routes';
+import { siteCopy } from '../../lib/site-copy';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = siteCopy[locale];
+---
+<footer class="site-footer">
+  <div class="shell footer-grid">
+    <div>
+      <a class="footer-brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}><img src="/brand/casa-barradonna-tiles-transparent.webp" alt="" width="956" height="357" loading="lazy" decoding="async" /></a>
+      <p>{t.footer}</p>
+      <span class="footer-location">Los Alcázares · Región de Murcia · España</span>
+    </div>
+    <div class="footer-links">
+      <span class="footer-heading">{t.links}</span>
+      {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)}>{label}</a>)}
+      <a href={pathFor(locale, 'request')}>{t.request}</a>
+    </div>
+    <div class="footer-social">
+      <span class="footer-heading">{t.social}</span>
+      <a href="https://www.instagram.com/casabarradonna/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+      <p>{t.illustration}</p>
+    </div>
+  </div>
+  <div class="shell footer-bottom"><span>© {new Date().getFullYear()} Casa Barradonna</span><span>{t.bottom}</span></div>
+</footer>

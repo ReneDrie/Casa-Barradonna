@@ -1,59 +1,29 @@
 ---
 import type { Locale, Section } from '../lib/types';
 import BookingForm from './BookingForm.astro';
+import HeroBlock from './blocks/HeroBlock.astro';
+import FactsBlock from './blocks/FactsBlock.astro';
+import IntroBlock from './blocks/IntroBlock.astro';
+import ImageTextBlock from './blocks/ImageTextBlock.astro';
+import FeatureGridBlock from './blocks/FeatureGridBlock.astro';
+import GalleryBlock from './blocks/GalleryBlock.astro';
+import QuoteBlock from './blocks/QuoteBlock.astro';
+import FaqBlock from './blocks/FaqBlock.astro';
+import CalloutBlock from './blocks/CalloutBlock.astro';
 
 interface Props { sections: Section[]; locale: Locale; pageKey: string }
 const { sections, locale, pageKey } = Astro.props;
 const illustrationLabel = locale === 'en' ? 'Illustrative artwork' : 'Sfeerillustratie';
 ---
 {sections.map((section) => (
-  section._type === 'hero' ? (
-    <section class:list={['hero-section', pageKey !== 'home' && 'inner-hero']}>
-      <div class="hero-art" style={section.imageUrl ? `background-image:url('${section.imageUrl}')` : undefined} aria-hidden="true"></div>
-      <div class="hero-wash" aria-hidden="true"></div>
-      <div class="shell hero-content">
-        <div class="hero-copy">
-          {section.eyebrow && <p class="eyebrow hero-eyebrow"><span class="tiny-sun" aria-hidden="true">✳</span>{section.eyebrow}</p>}
-          <h1>{section.heading}</h1>
-          <p class="hero-lead">{section.text}</p>
-          {section.buttonHref && <a class="button button-dark" href={section.buttonHref}>{section.buttonLabel}<span aria-hidden="true">↗</span></a>}
-        </div>
-        <span class="art-tag">{illustrationLabel}</span>
-      </div>
-    </section>
-  ) : section._type === 'facts' ? (
-    <section class="facts-section" aria-label={locale === 'en' ? 'Apartment highlights' : 'Hoogtepunten van het appartement'}>
-      <div class="shell facts-grid">{section.items.map((item) => <div class="fact"><strong>{item.value}</strong><span>{item.label}</span></div>)}</div>
-    </section>
-  ) : section._type === 'intro' ? (
-    <section class:list={['section-pad', 'intro-section', section.align === 'center' && 'intro-centered']}>
-      <div class="shell intro-inner"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2><p class="body-large">{section.text}</p></div>
-    </section>
-  ) : section._type === 'imageText' ? (
-    <section class:list={['section-pad', 'image-text-section', section.reverse && 'reverse']}>
-      <div class="shell image-text-grid">
-        <figure class="image-text-art">
-          {section.imageUrl ? <img src={section.imageUrl} alt={section.imageAlt || ''} loading="lazy" decoding="async" /> : <div class="empty-photo"></div>}
-          <figcaption>{illustrationLabel}</figcaption>
-        </figure>
-        <div class="image-text-copy"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2><p class="body-large">{section.text}</p>{section.buttonHref && <a class="text-link" href={section.buttonHref}>{section.buttonLabel}<span aria-hidden="true">↗</span></a>}</div>
-      </div>
-    </section>
-  ) : section._type === 'featureGrid' ? (
-    <section class="section-pad feature-section">
-      <div class="shell"><div class="section-heading"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2></div><div class="feature-grid">{section.items.map((item, itemIndex) => <article class="feature-card"><span class:list={['feature-icon', `icon-${item.icon || 'sun'}`]} aria-hidden="true">{item.icon === 'wave' ? '≈' : item.icon === 'pool' ? '◌' : item.icon === 'bed' ? '▣' : item.icon === 'car' ? '↗' : item.icon === 'heart' ? '♡' : '✳'}</span><span class="feature-number">0{itemIndex + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></div>
-    </section>
-  ) : section._type === 'gallery' ? (
-    <section class="section-pad gallery-section">
-      <div class="shell"><div class="section-heading"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2>{section.text && <p class="body-large">{section.text}</p>}</div><div class="gallery-grid">{section.items.map((item) => <figure class:list={['gallery-card', !item.imageUrl && 'gallery-placeholder']}>{item.imageUrl ? <img src={item.imageUrl} alt={item.alt || ''} loading="lazy" decoding="async" /> : <div class="gallery-empty"><span>✳</span></div>}<figcaption>{item.label}</figcaption></figure>)}</div></div>
-    </section>
-  ) : section._type === 'quote' ? (
-    <section class="quote-section section-pad"><div class="shell quote-inner"><span class="quote-ornament" aria-hidden="true">✳</span><blockquote>{section.text}</blockquote>{section.credit && <p>— {section.credit}</p>}</div></section>
-  ) : section._type === 'faq' ? (
-    <section class="section-pad faq-section"><div class="shell faq-grid"><div><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2></div><div class="faq-items">{section.items.map((item) => <details><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></div></section>
-  ) : section._type === 'callout' ? (
-    <section class="callout-section section-pad"><div class="shell callout-inner"><div><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2><p>{section.text}</p></div>{section.buttonHref && <a class="button button-light" href={section.buttonHref}>{section.buttonLabel}<span aria-hidden="true">↗</span></a>}</div></section>
-  ) : section._type === 'bookingForm' ? (
-    <BookingForm locale={locale} eyebrow={section.eyebrow} heading={section.heading} text={section.text} />
-  ) : null
+  section._type === 'hero' ? <HeroBlock section={section} isHome={pageKey === 'home'} illustrationLabel={illustrationLabel} /> :
+  section._type === 'facts' ? <FactsBlock section={section} locale={locale} /> :
+  section._type === 'intro' ? <IntroBlock section={section} /> :
+  section._type === 'imageText' ? <ImageTextBlock section={section} illustrationLabel={illustrationLabel} /> :
+  section._type === 'featureGrid' ? <FeatureGridBlock section={section} /> :
+  section._type === 'gallery' ? <GalleryBlock section={section} /> :
+  section._type === 'quote' ? <QuoteBlock section={section} /> :
+  section._type === 'faq' ? <FaqBlock section={section} /> :
+  section._type === 'callout' ? <CalloutBlock section={section} /> :
+  section._type === 'bookingForm' ? <BookingForm locale={locale} eyebrow={section.eyebrow} heading={section.heading} text={section.text} /> : null
 ))}

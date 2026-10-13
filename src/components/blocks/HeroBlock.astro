@@ -1,0 +1,19 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'hero' }>; isHome: boolean; illustrationLabel: string }
+const { section, isHome, illustrationLabel } = Astro.props;
+---
+<section class:list={['hero-section', !isHome && 'inner-hero']}>
+  <div class="hero-art" style={section.imageUrl ? `background-image:url('${section.imageUrl}')` : undefined} aria-hidden="true"></div>
+  <div class="hero-wash" aria-hidden="true"></div>
+  <div class="shell hero-content">
+    <div class="hero-copy">
+      {section.eyebrow && <p class="eyebrow hero-eyebrow"><span class="tiny-sun" aria-hidden="true">✳</span>{section.eyebrow}</p>}
+      <h1>{section.heading}</h1>
+      <p class="hero-lead">{section.text}</p>
+      {section.buttonHref && <a class="button button-dark" href={section.buttonHref}>{section.buttonLabel}<span aria-hidden="true">↗</span></a>}
+    </div>
+    <span class="art-tag">{illustrationLabel}</span>
+  </div>
+</section>

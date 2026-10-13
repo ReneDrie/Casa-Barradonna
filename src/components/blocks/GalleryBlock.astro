@@ -1,0 +1,9 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'gallery' }> }
+const { section } = Astro.props;
+---
+<section class="section-pad gallery-section">
+  <div class="shell"><div class="section-heading"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2>{section.text && <p class="body-large">{section.text}</p>}</div><div class="gallery-grid">{section.items.map((item) => <figure class:list={['gallery-card', !item.imageUrl && 'gallery-placeholder']}>{item.imageUrl ? <img src={item.imageUrl} alt={item.alt || ''} loading="lazy" decoding="async" /> : <div class="gallery-empty"><span>✳</span></div>}<figcaption>{item.label}</figcaption></figure>)}</div></div>
+</section>

@@ -45,7 +45,7 @@ h1, h2 { letter-spacing: -.035em; }
   gap: clamp(18px, 2.2vw, 34px);
 }
 .brand { width: clamp(190px, 19vw, 235px); flex: 0 0 auto; display: block; }
-.brand img { width: 100%; height: auto; }
+.brand img { width: 100%; height: auto; filter: drop-shadow(0 3px 3px rgba(49, 41, 30, .24)); }
 .header-actions { flex: 0 0 auto; }
 .language-switch {
   display: inline-grid;

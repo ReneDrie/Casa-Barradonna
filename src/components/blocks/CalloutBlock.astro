@@ -1,0 +1,7 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'callout' }> }
+const { section } = Astro.props;
+---
+<section class="callout-section section-pad"><div class="shell callout-inner"><div><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2><p>{section.text}</p></div>{section.buttonHref && <a class="button button-light" href={section.buttonHref}>{section.buttonLabel}<span aria-hidden="true">↗</span></a>}</div></section>

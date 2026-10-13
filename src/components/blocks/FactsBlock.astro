@@ -1,0 +1,9 @@
+---
+import type { Locale, Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'facts' }>; locale: Locale }
+const { section, locale } = Astro.props;
+---
+<section class="facts-section" aria-label={locale === 'en' ? 'Apartment highlights' : 'Hoogtepunten van het appartement'}>
+  <div class="shell facts-grid">{section.items.map((item) => <div class="fact"><strong>{item.value}</strong><span>{item.label}</span></div>)}</div>
+</section>

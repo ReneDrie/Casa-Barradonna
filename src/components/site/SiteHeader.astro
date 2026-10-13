@@ -1,0 +1,40 @@
+---
+import type { Locale } from '../../lib/types';
+import { navigation, pathFor } from '../../lib/routes';
+import { siteCopy } from '../../lib/site-copy';
+
+interface Props { locale: Locale; pageKey: string; alternatePath?: string }
+const { locale, pageKey, alternatePath } = Astro.props;
+const otherLocale: Locale = locale === 'en' ? 'nl' : 'en';
+const t = siteCopy[locale];
+---
+<header class="site-header">
+  <div class="header-inner shell">
+    <a class="brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}>
+      <img src="/brand/casa-barradonna-tiles-transparent.webp" alt="" width="956" height="357" fetchpriority="high" />
+    </a>
+    <nav id="primary-navigation" class="primary-navigation" aria-label={locale === 'en' ? 'Main navigation' : 'Hoofdnavigatie'}>
+      {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)} aria-current={pageKey === key ? 'page' : undefined}>{label}</a>)}
+      <a class="nav-request" href={pathFor(locale, 'request')} aria-current={pageKey === 'request' ? 'page' : undefined}>{t.request} <span aria-hidden="true">↗</span></a>
+    </nav>
+    <div class="header-actions">
+      <a class="language-switch" href={alternatePath || pathFor(otherLocale, 'home')} lang={otherLocale} hreflang={otherLocale} aria-label={otherLocale === 'en' ? 'View in English' : 'Bekijk in het Nederlands'}>{otherLocale.toUpperCase()}</a>
+      <button class="menu-toggle" type="button" aria-label={t.menu} data-open-label={t.menu} data-close-label={t.close} aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.querySelector<HTMLElement>('.primary-navigation');
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    toggle.setAttribute('aria-label', isOpen ? toggle.dataset.openLabel || 'Menu' : toggle.dataset.closeLabel || 'Close');
+    nav?.classList.toggle('is-open', !isOpen);
+  });
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+    nav.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', toggle.dataset.openLabel || 'Menu');
+  }));
+</script>

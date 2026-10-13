@@ -1,0 +1,9 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'featureGrid' }> }
+const { section } = Astro.props;
+---
+<section class="section-pad feature-section">
+  <div class="shell"><div class="section-heading"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2></div><div class="feature-grid">{section.items.map((item, itemIndex) => <article class="feature-card"><span class:list={['feature-icon', `icon-${item.icon || 'sun'}`]} aria-hidden="true">{item.icon === 'wave' ? '≈' : item.icon === 'pool' ? '◌' : item.icon === 'bed' ? '▣' : item.icon === 'car' ? '↗' : item.icon === 'heart' ? '♡' : '✳'}</span><span class="feature-number">0{itemIndex + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></div>
+</section>

@@ -1,0 +1,9 @@
+---
+import type { Section } from '../../lib/types';
+
+interface Props { section: Extract<Section, { _type: 'intro' }> }
+const { section } = Astro.props;
+---
+<section class:list={['section-pad', 'intro-section', section.align === 'center' && 'intro-centered']}>
+  <div class="shell intro-inner"><p class="eyebrow">{section.eyebrow}</p><h2>{section.heading}</h2><p class="body-large">{section.text}</p></div>
+</section>

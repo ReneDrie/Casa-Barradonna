@@ -10,7 +10,7 @@ See [the project roadmap](ROADMAP.md) for prioritized TODOs, launch requirements
 
 - English and Dutch pages: home, apartment, Los Alcázares, about, request.
 - Reusable Sanity sections: hero, facts, introduction, image and text, feature cards, gallery, quote, FAQ, call to action, booking form.
-- Local seed content is used until a Sanity project is connected.
+- Local seed content is used until page documents are published in Sanity.
 - The owners' ceramic tile logo is the site mark. Its original file is in `assets/brand/cbd-logo.png`; the supplied transparent website version is `public/brand/casa-barradonna-tiles-transparent.webp`. The colors, tile trim, and subtle plaster texture are drawn from that logo.
 - The two illustrations in `public/images/` are original generated mood artwork. They are not photos of the apartment or a factual depiction of its surroundings. Replace them with the owners' original photos after handover.
 - Handover is expected at the end of Q1 2027. April 1, 2027 and a three-night minimum are planning defaults, not confirmed rental terms.
@@ -25,6 +25,15 @@ npm run dev
 ```
 
 Open `http://localhost:4321/en/` or `/nl/`. Run `npm run check`, `npm run build`, and `npm run test:booking` before a release.
+
+## Component structure
+
+- `src/layouts/SiteLayout.astro` owns the HTML document, SEO metadata, preview strip, and main slot.
+- `src/components/site/` contains the reusable header and footer. Shared English and Dutch labels live in `src/lib/site-copy.ts`.
+- `src/components/PageSections.astro` selects a component for each Sanity section in page order. The individual blocks live in `src/components/blocks/`; the booking form remains in `src/components/BookingForm.astro`.
+- `src/lib/types.ts` defines the section data, `studio/schemaTypes/index.ts` defines the editor fields, and `src/data/seed.ts` supplies fallback page content.
+
+To add a page block, add its data shape to `Section`, its Sanity schema, a component in `src/components/blocks/`, and a case in `PageSections.astro`. Then add content in both languages and regenerate `studio/seed.ndjson` if the seed changes.
 
 ## Connect Sanity
 

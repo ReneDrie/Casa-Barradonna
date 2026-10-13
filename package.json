@@ -9,6 +9,7 @@
     "check": "astro check",
     "studio": "sanity dev",
     "studio:build": "sanity build studio-dist -y",
+    "studio:deploy": "sanity deploy",
     "cms:seed:export": "node scripts/export-sanity-seed.mjs",
     "test:booking": "node --test tests/booking.test.mjs"
   },

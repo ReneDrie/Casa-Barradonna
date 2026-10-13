@@ -1,14 +1,15 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 
 const imageField = defineField({ name: 'image', title: 'Image', type: 'image', options: { hotspot: true } });
-const temporaryImageField = defineField({ name: 'imageUrl', title: 'Temporary local illustration path', type: 'string', description: 'Used until an uploaded image is added; for example /images/coastal-hero.webp.' });
+const temporaryImageField = defineField({ name: 'imageUrl', title: 'Local fallback image path', type: 'string', description: 'Used on the website until an uploaded image is added; for example /images/coastal-hero.webp.' });
+const imageNoteField = defineField({ name: 'imageNote', title: 'Visible image note', type: 'string', description: 'Shown over the hero image; use it to identify artist impressions or other illustrative imagery.' });
 const eyebrowField = defineField({ name: 'eyebrow', title: 'Small heading', type: 'string' });
 const headingField = defineField({ name: 'heading', title: 'Heading', type: 'string', validation: (Rule) => Rule.required() });
 const textField = defineField({ name: 'text', title: 'Body text', type: 'text', rows: 4 });
 const buttonLabelField = defineField({ name: 'buttonLabel', title: 'Button label', type: 'string' });
 const buttonHrefField = defineField({ name: 'buttonHref', title: 'Button link', type: 'string', description: 'Use a local path such as /en/request/ or a full https:// URL.' });
 
-const hero = defineType({ name: 'hero', title: 'Hero', type: 'object', fields: [eyebrowField, headingField, textField, imageField, temporaryImageField, buttonLabelField, buttonHrefField], preview: { select: { title: 'heading', media: 'image' }, prepare: ({ title, media }) => ({ title, subtitle: 'Hero', media }) } });
+const hero = defineType({ name: 'hero', title: 'Hero', type: 'object', fields: [eyebrowField, headingField, textField, imageField, temporaryImageField, imageNoteField, buttonLabelField, buttonHrefField], preview: { select: { title: 'heading', media: 'image' }, prepare: ({ title, media }) => ({ title, subtitle: 'Hero', media }) } });
 const facts = defineType({ name: 'facts', title: 'Fact strip', type: 'object', fields: [defineField({ name: 'items', type: 'array', of: [defineArrayMember({ type: 'object', fields: [defineField({ name: 'value', type: 'string' }), defineField({ name: 'label', type: 'string' })] })], validation: (Rule) => Rule.min(2).max(4) })], preview: { prepare: () => ({ title: 'Fact strip' }) } });
 const intro = defineType({ name: 'intro', title: 'Text introduction', type: 'object', fields: [eyebrowField, headingField, textField, defineField({ name: 'align', type: 'string', options: { list: [{ title: 'Left', value: 'left' }, { title: 'Centre', value: 'center' }] } })], preview: { select: { title: 'heading' }, prepare: ({ title }) => ({ title, subtitle: 'Introduction' }) } });
 const imageText = defineType({ name: 'imageText', title: 'Image and text', type: 'object', fields: [eyebrowField, headingField, textField, imageField, temporaryImageField, defineField({ name: 'imageAlt', title: 'Image description', type: 'string' }), buttonLabelField, buttonHrefField, defineField({ name: 'reverse', title: 'Image on right', type: 'boolean' })], preview: { select: { title: 'heading', media: 'image' }, prepare: ({ title, media }) => ({ title, subtitle: 'Image and text', media }) } });

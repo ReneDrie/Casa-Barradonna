@@ -10,9 +10,9 @@ See [the project roadmap](ROADMAP.md) for prioritized TODOs, launch requirements
 
 - English and Dutch pages: home, apartment, Los Alcázares, about, request.
 - Reusable Sanity sections: hero, facts, introduction, image and text, feature cards, gallery, quote, FAQ, call to action, booking form.
-- Local seed content is used until page documents are published in Sanity.
+- The ten English and Dutch page documents are published in Sanity. Local seed content remains as a fallback if a core page is missing.
 - The owners' ceramic tile logo is the site mark. Its original file is in `assets/brand/cbd-logo.png`; the supplied transparent website version is `public/brand/casa-barradonna-tiles-transparent.webp`. The colors, tile trim, and subtle plaster texture are drawn from that logo.
-- The two illustrations in `public/images/` are original generated mood artwork. They are not photos of the apartment or a factual depiction of its surroundings. Replace them with the owners' original photos after handover.
+- Five supplied artist impressions in `public/images/development-*.webp` show the planned complex and shared pool. Their finished appearance may differ; no apartment interior is pictured. The two `coastal-*.webp` files are generated mood artwork. Replace both kinds of preview imagery with approved property photos after handover.
 - Handover is expected at the end of Q1 2027. April 1, 2027 and a three-night minimum are planning defaults, not confirmed rental terms.
 - No contact details or Airbnb listing are available yet. The request form cannot submit in the preview.
 
@@ -37,11 +37,12 @@ To add a page block, add its data shape to `Section`, its Sanity schema, a compo
 
 ## Connect Sanity
 
-1. The Sanity project `b5rbq1la` and its public `production` dataset are connected in `.env.example`. Copy that file to `.env` for local development, and set the same project ID and dataset in the hosting build environment. The project ID is not a secret key; editors sign in to Sanity separately. The dataset currently has no page documents, so the site continues to use local seed pages until content is imported or published.
-2. Start the editor with `npm run studio`. Sanity sign-in is required for editing. The Studio source is in `sanity.config.ts` and `studio/schemaTypes/`.
-3. After signing in with an editor account, on a **new, empty dataset only**, import the 10 prepared page documents: `npx sanity dataset import studio/seed.ndjson production`. The seed can be regenerated from the local copy with `npm run cms:seed:export`. Do not reimport after editors have begun changing content: doing so could overwrite their work.
-4. The website fetches published Sanity content at build time. If a core page is not yet in Sanity, its local seed copy remains available. Studio changes therefore require a new site build before they appear publicly.
-5. On Cloudflare Pages, create a Deploy Hook and connect a Sanity webhook for published `page` changes. Keep the hook URL private. [Cloudflare's Deploy Hook documentation](https://developers.cloudflare.com/pages/configuration/deploy-hooks/) describes this flow.
+1. The Sanity project `b5rbq1la` and its public `production` dataset are connected in `.env.example`. Copy that file to `.env` for local development, and set the same project ID and dataset in the hosting build environment. The project ID is not a secret key; editors sign in to Sanity separately. The dataset contains the ten prepared page documents.
+2. Start the editor locally with `npm run studio`. Sanity sign-in is required for editing. The Studio source is in `sanity.config.ts` and `studio/schemaTypes/`.
+3. The editor is published at [casa-barradonna.sanity.studio](https://casa-barradonna.sanity.studio/). To redeploy after changing Studio code or schemas, sign in to the Sanity CLI with a member account that can deploy to project `b5rbq1la`, then run `npm run studio:deploy`. The CLI project, dataset, and deployed app ID are set in `sanity.cli.ts`. The Cloudflare Pages website build does not publish the Studio.
+4. The ten prepared page documents have already been imported into `production`. For a **new, empty dataset only**, import them with `npx sanity dataset import studio/seed.ndjson DATASET_NAME`. The seed can be regenerated from the local copy with `npm run cms:seed:export`. Do not reimport into `production`: doing so could overwrite editors' work.
+5. The website fetches published Sanity content at build time. If a core page is not yet in Sanity, its local seed copy remains available. Studio changes therefore require a new site build before they appear publicly.
+6. On Cloudflare Pages, create a Deploy Hook and connect a Sanity webhook for published `page` changes. Keep the hook URL private. [Cloudflare's Deploy Hook documentation](https://developers.cloudflare.com/pages/configuration/deploy-hooks/) describes this flow.
 
 The five core URLs are defined in `src/lib/routes.ts` and should stay fixed. Editors can create new pages by choosing a new stable `pageKey` and a unique slug in each language. Use the same `pageKey` for the English and Dutch versions so the language switch links them. New pages are generated on the next build. Links to new pages can be added through CMS call-to-action fields; adding them to the main navigation requires a code change.
 
@@ -74,7 +75,7 @@ For the first launch, a shared owner inbox can handle requests. If the volume ju
 
 ## Artwork prompts
 
-Both assets were generated with the built-in image generation tool and converted to WebP for this project.
+The two `coastal-*.webp` mood assets were generated with the built-in image generation tool and converted to WebP for this project. The five `development-*.webp` images came from the owner-supplied artist impressions and were converted to WebP without changing their composition.
 
 - `coastal-hero.webp`: a wide, contemporary hand-painted illustration inspired by the Mar Menor, with calm sea, pale sand, palms, whitewashed architecture, turquoise pool motif, and generous left-side space for a headline; no people, logos, text, or claim to show the real property.
 - `coastal-still-life.webp`: a contemporary hand-painted Mediterranean holiday still life with striped towel, oranges, ceramic jug, book, sunglasses, and distant sea; no people, text, logos, or apartment interior.

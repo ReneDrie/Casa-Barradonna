@@ -14,6 +14,6 @@ const { section, isHome, illustrationLabel } = Astro.props;
       <p class="hero-lead">{section.text}</p>
       {section.buttonHref && <a class="button button-dark" href={section.buttonHref}>{section.buttonLabel}<span aria-hidden="true">↗</span></a>}
     </div>
-    <span class="art-tag">{illustrationLabel}</span>
+    <span class="art-tag">{section.imageNote || illustrationLabel}</span>
   </div>
 </section>

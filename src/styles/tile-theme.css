@@ -96,7 +96,7 @@ h1, h2 { letter-spacing: -.035em; }
 .hero-eyebrow { color: #9f542f; }
 .tiny-sun { color: #c18234; }
 .hero-lead { color: #34566e; }
-.art-tag { background: rgba(23, 63, 103, .72); }
+.art-tag { top: 20px; bottom: auto; max-width: min(75%, 300px); background: rgba(23, 63, 103, .72); text-align: right; line-height: 1.4; }
 .facts-section {
   background: #173f67 url('/brand/plaster-grain.svg') repeat;
   border-top: 5px solid #bb7b40;

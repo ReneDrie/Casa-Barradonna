@@ -2,7 +2,7 @@ export type Locale = 'en' | 'nl';
 export type PageKey = 'home' | 'apartment' | 'area' | 'about' | 'request';
 
 export type Section =
-  | { _type: 'hero'; eyebrow?: string; heading: string; text: string; imageUrl?: string; buttonLabel?: string; buttonHref?: string }
+  | { _type: 'hero'; eyebrow?: string; heading: string; text: string; imageUrl?: string; imageNote?: string; buttonLabel?: string; buttonHref?: string }
   | { _type: 'facts'; items: { value: string; label: string }[] }
   | { _type: 'intro'; eyebrow?: string; heading: string; text: string; align?: 'left' | 'center' }
   | { _type: 'imageText'; eyebrow?: string; heading: string; text: string; imageUrl?: string; imageAlt?: string; buttonLabel?: string; buttonHref?: string; reverse?: boolean }

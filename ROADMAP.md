@@ -5,7 +5,7 @@ Updated 13 October 2026. This is the working backlog for the website and booking
 ## Already in the preview
 
 - [x] Bilingual English and Dutch Astro pages for home, apartment, Los Alcázares, about, and booking requests.
-- [x] Responsive design, simple Casa Barradonna logo, and illustrative mood artwork.
+- [x] Responsive design using the owners' ceramic tile logo, tile details, plaster texture, and illustrative mood artwork.
 - [x] Reusable Sanity page sections and local content that works before a Sanity project is connected.
 - [x] Static builds with page metadata, language alternates, sitemap, and prelaunch search blocking.
 - [x] A request-to-book form and server endpoints prepared behind disabled launch switches.

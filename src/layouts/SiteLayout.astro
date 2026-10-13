@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/tile-theme.css';
 import type { Locale, PageKey } from '../lib/types';
 import { navigation, pageKeys, pathFor } from '../lib/routes';
 
@@ -31,12 +32,12 @@ const t = locale === 'en'
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f8f2e9" />
+    <meta name="theme-color" content="#eee6d6" />
     <meta name="description" content={description} />
     {!isLive && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     {enUrl && nlUrl && <><link rel="alternate" hreflang="en" href={enUrl} /><link rel="alternate" hreflang="nl" href={nlUrl} /><link rel="alternate" hreflang="x-default" href={enUrl} /></>}
-    <link rel="icon" type="image/svg+xml" href="/brand/mark.svg" />
+    <link rel="icon" type="image/svg+xml" href="/brand/tile-favicon.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -48,25 +49,25 @@ const t = locale === 'en'
     {!isLive && <div class="preview-strip">{t.note}</div>}
     <header class="site-header">
       <div class="header-inner shell">
+        <p class="header-place"><span>Los Alcázares</span><span>España · Mar Menor</span></p>
         <a class="brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}>
-          <img src="/brand/mark.svg" alt="" width="48" height="48" />
-          <span class="brand-type"><strong>casa</strong><strong>barra<span>donna</span></strong></span>
+          <img src="/brand/casa-barradonna-tiles.webp" alt="" width="1024" height="433" fetchpriority="high" />
         </a>
-        <nav id="primary-navigation" class="primary-navigation" aria-label={locale === 'en' ? 'Main navigation' : 'Hoofdnavigatie'}>
-          {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)} aria-current={pageKey === key ? 'page' : undefined}>{label}</a>)}
-          <a class="nav-request" href={pathFor(locale, 'request')}>{t.request} <span aria-hidden="true">↗</span></a>
-        </nav>
         <div class="header-actions">
           <a class="language-switch" href={alternatePath || pathFor(otherLocale, 'home')} lang={otherLocale} hreflang={otherLocale} aria-label={otherLocale === 'en' ? 'View in English' : 'Bekijk in het Nederlands'}>{otherLocale.toUpperCase()}</a>
           <button class="menu-toggle" type="button" aria-label={t.menu} data-open-label={t.menu} data-close-label={t.close} aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span></button>
         </div>
       </div>
+      <nav id="primary-navigation" class="primary-navigation" aria-label={locale === 'en' ? 'Main navigation' : 'Hoofdnavigatie'}>
+        {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)} aria-current={pageKey === key ? 'page' : undefined}>{label}</a>)}
+        <a class="nav-request" href={pathFor(locale, 'request')} aria-current={pageKey === 'request' ? 'page' : undefined}>{t.request} <span aria-hidden="true">↗</span></a>
+      </nav>
     </header>
     <main id="main-content"><slot /></main>
     <footer class="site-footer">
       <div class="shell footer-grid">
         <div>
-          <a class="footer-brand" href={pathFor(locale, 'home')}>casa<br /><span>barradonna</span></a>
+          <a class="footer-brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}><img src="/brand/casa-barradonna-tiles.webp" alt="" width="1024" height="433" loading="lazy" decoding="async" /></a>
           <p>{t.footer}</p>
           <span class="footer-location">Los Alcázares · Región de Murcia · España</span>
         </div>

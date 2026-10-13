@@ -49,25 +49,24 @@ const t = locale === 'en'
     {!isLive && <div class="preview-strip">{t.note}</div>}
     <header class="site-header">
       <div class="header-inner shell">
-        <p class="header-place"><span>Los Alcázares</span><span>España · Mar Menor</span></p>
         <a class="brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}>
-          <img src="/brand/casa-barradonna-tiles.webp" alt="" width="1024" height="433" fetchpriority="high" />
+          <img src="/brand/casa-barradonna-tiles-transparent.webp" alt="" width="956" height="357" fetchpriority="high" />
         </a>
+        <nav id="primary-navigation" class="primary-navigation" aria-label={locale === 'en' ? 'Main navigation' : 'Hoofdnavigatie'}>
+          {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)} aria-current={pageKey === key ? 'page' : undefined}>{label}</a>)}
+          <a class="nav-request" href={pathFor(locale, 'request')} aria-current={pageKey === 'request' ? 'page' : undefined}>{t.request} <span aria-hidden="true">↗</span></a>
+        </nav>
         <div class="header-actions">
           <a class="language-switch" href={alternatePath || pathFor(otherLocale, 'home')} lang={otherLocale} hreflang={otherLocale} aria-label={otherLocale === 'en' ? 'View in English' : 'Bekijk in het Nederlands'}>{otherLocale.toUpperCase()}</a>
           <button class="menu-toggle" type="button" aria-label={t.menu} data-open-label={t.menu} data-close-label={t.close} aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span></button>
         </div>
       </div>
-      <nav id="primary-navigation" class="primary-navigation" aria-label={locale === 'en' ? 'Main navigation' : 'Hoofdnavigatie'}>
-        {navigation[locale].map(({ key, label }) => <a href={pathFor(locale, key)} aria-current={pageKey === key ? 'page' : undefined}>{label}</a>)}
-        <a class="nav-request" href={pathFor(locale, 'request')} aria-current={pageKey === 'request' ? 'page' : undefined}>{t.request} <span aria-hidden="true">↗</span></a>
-      </nav>
     </header>
     <main id="main-content"><slot /></main>
     <footer class="site-footer">
       <div class="shell footer-grid">
         <div>
-          <a class="footer-brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}><img src="/brand/casa-barradonna-tiles.webp" alt="" width="1024" height="433" loading="lazy" decoding="async" /></a>
+          <a class="footer-brand" href={pathFor(locale, 'home')} aria-label={locale === 'en' ? 'Casa Barradonna home' : 'Casa Barradonna startpagina'}><img src="/brand/casa-barradonna-tiles-transparent.webp" alt="" width="956" height="357" loading="lazy" decoding="async" /></a>
           <p>{t.footer}</p>
           <span class="footer-location">Los Alcázares · Región de Murcia · España</span>
         </div>

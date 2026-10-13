@@ -11,7 +11,7 @@ See [the project roadmap](ROADMAP.md) for prioritized TODOs, launch requirements
 - English and Dutch pages: home, apartment, Los Alcázares, about, request.
 - Reusable Sanity sections: hero, facts, introduction, image and text, feature cards, gallery, quote, FAQ, call to action, booking form.
 - Local seed content is used until a Sanity project is connected.
-- The owners' ceramic tile logo is the site mark. Its original file is in `assets/brand/cbd-logo.png`; the optimized website copy is `public/brand/casa-barradonna-tiles.webp`. The colors, tile trim, and subtle plaster texture are drawn from that logo.
+- The owners' ceramic tile logo is the site mark. Its original file is in `assets/brand/cbd-logo.png`; the supplied transparent website version is `public/brand/casa-barradonna-tiles-transparent.webp`. The colors, tile trim, and subtle plaster texture are drawn from that logo.
 - The two illustrations in `public/images/` are original generated mood artwork. They are not photos of the apartment or a factual depiction of its surroundings. Replace them with the owners' original photos after handover.
 - Handover is expected at the end of Q1 2027. April 1, 2027 and a three-night minimum are planning defaults, not confirmed rental terms.
 - No contact details or Airbnb listing are available yet. The request form cannot submit in the preview.
